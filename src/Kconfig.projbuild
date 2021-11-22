@@ -1,0 +1,73 @@
+menu "BLE HID COMBO Configuration"
+
+    config PIN_STATUS_MAIN
+        int "Main LED GPIO number"
+        range 0 34
+        default 15
+        help
+            GPIO number (IOxx) for the 'Main status' LED.
+
+    config PIN_STATUS_ALT
+        int "Alternate LED GPIO number"
+        range 0 34
+        default 2
+        help
+            GPIO number (IOxx) for the 'Alternate status' LED.
+
+    config PIN_STATUS_RGB_RED
+        int "RGB LED [RED] GPIO number"
+        range 0 34
+        default 0
+        help
+            GPIO number (IOxx) for the 'Alternate status' LED.
+
+    config PIN_STATUS_RGB_GREEN
+        int "RGB LED [GREEN] GPIO number"
+        range 0 34
+        default 4
+        help
+            GPIO number (IOxx) for the 'Alternate status' LED.
+
+    config PIN_STATUS_RGB_BLUE
+        int "RGB LED [BLUE] GPIO number"
+        range 0 34
+        default 5
+        help
+            GPIO number (IOxx) for the 'Alternate status' LED.
+#
+    config PIN_BUTTON_ACTION_WHITE
+        int "BUTTON 'ACTION' [WHITE] GPIO number"
+        range 0 34
+        default 18
+        help
+            GPIO number (IOxx) for the button panel : 'action'/'fire'/'ok', white button.
+
+    config PIN_BUTTON_LEFT_YELLOW
+        int "BUTTON 'LEFT' [YELLOW] GPIO number"
+        range 0 34
+        default 19
+        help
+            GPIO number (IOxx) for the button panel : 'left', yellow button.
+
+    config PIN_BUTTON_DOWN_GREEN
+        int "BUTTON 'DOWN' [GREEN] GPIO number"
+        range 0 34
+        default 21
+        help
+            GPIO number (IOxx) for the button panel : 'down', green button.
+
+    config PIN_BUTTON_UP_BLUE
+        int "BUTTON 'UP' [BLUE] GPIO number"
+        range 0 34
+        default 22
+        help
+            GPIO number (IOxx) for the button panel : 'up', blue button.
+
+    config PIN_BUTTON_RIGHT_RED
+        int "BUTTON 'RIGHT' [RED] GPIO number"
+        range 0 34
+        default 23
+        help
+            GPIO number (IOxx) for the button panel : 'right', red button.
+
+endmenu
