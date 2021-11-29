@@ -14,6 +14,7 @@
 #include "sdkconfig.h"
 #include "ControlPanelEsp32.hpp"
 #include "InputButton.hpp"
+#include "HidBootKeyboardInputReport.hpp"
 
 static char LOG_TAG[] = "SampleHIDDevice";
 
@@ -35,7 +36,8 @@ class MyOutputCallbacks : public BLECharacteristicCallbacks {
 	}
 };
 
-class MyTask : public Task, public InputButtonListener {
+class MyTask : public Task, public InputButtonListener, public HidBootKeyboardInputReportListener {
+	HidBootKeyboardInputReport report ;
 	void run(void*){
     	//vTaskDelay(5000/portTICK_PERIOD_MS);  // wait 5 seconds before send first message
     	while(1){
@@ -64,6 +66,10 @@ class MyTask : public Task, public InputButtonListener {
     	}
 	}
 
+	public:
+	MyTask() {
+		report.withListener(this) ;
+	}
 	void onInputButtonEvent(InputButtonEvent* event) {
 		if (!isStarted()) return; // no connection
 		if (STATE_CHANGE == event->type) {
@@ -71,17 +77,22 @@ class MyTask : public Task, public InputButtonListener {
 				case CONFIG_PIN_BUTTON_ACTION_WHITE:
 					if (event->source->isHigh()) {
 						ESP_LOGI(LOG_TAG, "send key press action");
-						uint8_t a[] = {0x0/*no modifier*/, 0x0, 0x0b/* 'Q'*/, 0x0,0x0,0x0,0x0,0x0};
-						input->setValue(a,sizeof(a));
-						input->notify();
+						report.registerKeyPress(0x0b) ;
 					} else {
 						ESP_LOGI(LOG_TAG, "send key release action");
-						uint8_t v[] = {0x0, 0x0, 0x0, 0x0,0x0,0x0,0x0,0x0}; // how do we now which key has been depressed ??
-						input->setValue(v, sizeof(v));
-						input->notify();
+						report.registerKeyRelease(0x0b) ;
 					}
 				break;
 			}
+		}
+	}
+
+	void onHidBootKeyboardInputReportEvent(HidBootKeyboardInputReportEvent* event) {
+		if (!isStarted()) return; // no connection
+		if (REPORT_CHANGED == event->type) {
+			ESP_LOGI(LOG_TAG, "send new report");
+			input->setValue(event->source->getReport(), event->source->getSizeOfReport()) ;
+			input->notify() ;
 		}
 	}
 };
