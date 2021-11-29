@@ -12,6 +12,8 @@
 #include <Task.h>
 
 #include "sdkconfig.h"
+#include "ControlPanelEsp32.hpp"
+#include "InputButton.hpp"
 
 static char LOG_TAG[] = "SampleHIDDevice";
 
@@ -33,54 +35,86 @@ class MyOutputCallbacks : public BLECharacteristicCallbacks {
 	}
 };
 
-class MyTask : public Task {
+class MyTask : public Task, public InputButtonListener {
 	void run(void*){
-    	vTaskDelay(5000/portTICK_PERIOD_MS);  // wait 5 seconds before send first message
+    	//vTaskDelay(5000/portTICK_PERIOD_MS);  // wait 5 seconds before send first message
     	while(1){
-        	const char* hello = "Hello world from esp32 hid keyboard!!!\n";
-			while(*hello){
-				KEYMAP map = keymap[(uint8_t)*hello];
+        	//const char* hello = "Hello world from esp32 hid keyboard!!!\n";
+			//while(*hello){
+				//KEYMAP map = keymap[(uint8_t)*hello];
 				/*
 				 * simulate keydown, we can send up to 6 keys
 				 */
-				uint8_t a[] = {map.modifier, 0x0, map.usage, 0x0,0x0,0x0,0x0,0x0};
-				input->setValue(a,sizeof(a));
-				input->notify();
+				//uint8_t a[] = {map.modifier, 0x0, map.usage, 0x0,0x0,0x0,0x0,0x0};
+				//input->setValue(a,sizeof(a));
+				//input->notify();
 
 				/*
 				 * simulate keyup
 				 */
-				uint8_t v[] = {0x0, 0x0, 0x0, 0x0,0x0,0x0,0x0,0x0};
-				input->setValue(v, sizeof(v));
-				input->notify();
-				hello++;
+				//uint8_t v[] = {0x0, 0x0, 0x0, 0x0,0x0,0x0,0x0,0x0};
+				//input->setValue(v, sizeof(v));
+				//input->notify();
+				//hello++;
 
-				vTaskDelay(10/portTICK_PERIOD_MS);
-			}
+				//vTaskDelay(10/portTICK_PERIOD_MS);
+			//}
+			//ESP_LOGI(LOG_TAG, "I'm alive and well !");
         	vTaskDelay(2000/portTICK_PERIOD_MS); // simulate write message every 2 seconds
     	}
+	}
+
+	void onInputButtonEvent(InputButtonEvent* event) {
+		if (!isStarted()) return; // no connection
+		if (STATE_CHANGE == event->type) {
+			switch (event->source->getId()) {
+				case CONFIG_PIN_BUTTON_ACTION_WHITE:
+					if (event->source->isHigh()) {
+						ESP_LOGI(LOG_TAG, "send key press action");
+						uint8_t a[] = {0x0/*no modifier*/, 0x0, 0x0b/* 'Q'*/, 0x0,0x0,0x0,0x0,0x0};
+						input->setValue(a,sizeof(a));
+						input->notify();
+					} else {
+						ESP_LOGI(LOG_TAG, "send key release action");
+						uint8_t v[] = {0x0, 0x0, 0x0, 0x0,0x0,0x0,0x0,0x0}; // how do we now which key has been depressed ??
+						input->setValue(v, sizeof(v));
+						input->notify();
+					}
+				break;
+			}
+		}
 	}
 };
 
 MyTask *task;
 class MyCallbacks : public BLEServerCallbacks {
+	public:
+	ControlPanelEsp32* controlPanel ;
 	void onConnect(BLEServer* pServer){
+		controlPanel->getMainLed()->setFeedbackSequenceAndLoop(ON) ;
 		task->start();
 	}
 
 	void onDisconnect(BLEServer* pServer){
+		controlPanel->getMainLed()->setFeedbackSequenceAndLoop(BLINK_TWICE);
 		task->stop();
 	}
 };
 
 class MainBLEServer: public Task {
+	public:
+	ControlPanelEsp32* controlPanel ;
 	void run(void *data) {
 		ESP_LOGD(LOG_TAG, "Starting BLE work!");
+		controlPanel->getMainLed()->setFeedbackSequenceAndLoop(BLINK_TWICE);
 
 		task = new MyTask();
 		BLEDevice::init("ESP32");
 		BLEServer *pServer = BLEDevice::createServer();
-		pServer->setCallbacks(new MyCallbacks());
+		MyCallbacks *callbacks = new MyCallbacks();
+		callbacks->controlPanel = controlPanel;
+		pServer->setCallbacks(callbacks);
+		controlPanel->getActionWhite()->withListener(task) ;
 
 		/*
 		 * Instantiate hid device
@@ -183,10 +217,11 @@ class MainBLEServer: public Task {
 };
 
 
-void SampleHID(void)
+void SampleHID(ControlPanelEsp32* controlPanel)
 {
 	//esp_log_level_set("*", ESP_LOG_DEBUG);
 	MainBLEServer* pMainBleServer = new MainBLEServer();
+	pMainBleServer->controlPanel = controlPanel ;
 	pMainBleServer->setStackSize(20000);
 	pMainBleServer->start();
 

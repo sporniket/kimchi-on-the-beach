@@ -41,6 +41,7 @@ public:
 	void setCore(BaseType_t coreId);
 	void start(void* taskData = nullptr);
 	void stop();
+	inline bool isStarted() {return nullptr != m_handle ;}
 	/**
 	 * @brief Body of the task to execute.
 	 *
