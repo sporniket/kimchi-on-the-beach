@@ -41,6 +41,10 @@ class ButtonWatcherTask : public Task {
             GeneralPurposeInputOutput* gpio = controlPanel->getGpio();
             while(true) {
                 controlPanel->getActionWhite()->update(gpio->getDigital()->read(CONFIG_PIN_BUTTON_ACTION_WHITE));
+                controlPanel->getLeftYellow()->update(gpio->getDigital()->read(CONFIG_PIN_BUTTON_LEFT_YELLOW));
+                controlPanel->getDownGreen()->update(gpio->getDigital()->read(CONFIG_PIN_BUTTON_DOWN_GREEN));
+                controlPanel->getUpBlue()->update(gpio->getDigital()->read(CONFIG_PIN_BUTTON_UP_BLUE));
+                controlPanel->getRightRed()->update(gpio->getDigital()->read(CONFIG_PIN_BUTTON_RIGHT_RED));
                 vTaskDelay(SLEEP_TIME);
             }
         }
@@ -50,7 +54,15 @@ void ControlPanelEsp32::start() {
     // setup gpios
     gpio->getDigital()->setup(CONFIG_PIN_STATUS_MAIN, WRITE) ;
     gpio->getDigital()->setup(CONFIG_PIN_BUTTON_ACTION_WHITE, READ);
-    actionWhite.withDebouncer(DEBOUNCER_MINIMAL) ;
+    gpio->getDigital()->setup(CONFIG_PIN_BUTTON_LEFT_YELLOW, READ);
+    gpio->getDigital()->setup(CONFIG_PIN_BUTTON_DOWN_GREEN, READ);
+    gpio->getDigital()->setup(CONFIG_PIN_BUTTON_UP_BLUE, READ);
+    gpio->getDigital()->setup(CONFIG_PIN_BUTTON_RIGHT_RED, READ);
+    actionWhite.withDebouncer(DEBOUNCER_TYPICAL) ;
+    leftYellow.withDebouncer(DEBOUNCER_TYPICAL) ;
+    downGreen.withDebouncer(DEBOUNCER_TYPICAL) ;
+    upBlue.withDebouncer(DEBOUNCER_TYPICAL) ;
+    rightRed.withDebouncer(DEBOUNCER_TYPICAL) ;
 
     // setup and start led task
     LedUpdaterTask *updateTask = new LedUpdaterTask() ;

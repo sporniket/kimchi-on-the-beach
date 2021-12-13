@@ -15,6 +15,7 @@
 #include "ControlPanelEsp32.hpp"
 #include "InputButton.hpp"
 #include "HidBootKeyboardInputReport.hpp"
+#include "KimchiOnTheBeach.hpp"
 
 static char LOG_TAG[] = "SampleHIDDevice";
 
@@ -39,9 +40,9 @@ class MyOutputCallbacks : public BLECharacteristicCallbacks {
 class MyTask : public Task, public InputButtonListener, public HidBootKeyboardInputReportListener {
 	HidBootKeyboardInputReport report ;
 	void run(void*){
-    	//vTaskDelay(5000/portTICK_PERIOD_MS);  // wait 5 seconds before send first message
-    	while(1){
-        	//const char* hello = "Hello world from esp32 hid keyboard!!!\n";
+		//vTaskDelay(5000/portTICK_PERIOD_MS);  // wait 5 seconds before send first message
+		while(1){
+			//const char* hello = "Hello world from esp32 hid keyboard!!!\n";
 			//while(*hello){
 				//KEYMAP map = keymap[(uint8_t)*hello];
 				/*
@@ -62,8 +63,8 @@ class MyTask : public Task, public InputButtonListener, public HidBootKeyboardIn
 				//vTaskDelay(10/portTICK_PERIOD_MS);
 			//}
 			//ESP_LOGI(LOG_TAG, "I'm alive and well !");
-        	vTaskDelay(2000/portTICK_PERIOD_MS); // simulate write message every 2 seconds
-    	}
+			vTaskDelay(2000/portTICK_PERIOD_MS); // simulate write message every 2 seconds
+		}
 	}
 
 	public:
@@ -99,16 +100,28 @@ class MyTask : public Task, public InputButtonListener, public HidBootKeyboardIn
 
 MyTask *task;
 class MyCallbacks : public BLEServerCallbacks {
+	private:
+		KimchiOnTheBeach kotb;
+		bool useKotb = true ;
 	public:
 	ControlPanelEsp32* controlPanel ;
+	KimchiOnTheBeach* getKimchiOnTheBeach() {return &kotb ;}
 	void onConnect(BLEServer* pServer){
 		controlPanel->getMainLed()->setFeedbackSequenceAndLoop(ON) ;
-		task->start();
+		if(!useKotb) {
+			task->start(); 
+		} else {
+			kotb.start();
+		}
 	}
 
 	void onDisconnect(BLEServer* pServer){
 		controlPanel->getMainLed()->setFeedbackSequenceAndLoop(BLINK_TWICE);
-		task->stop();
+		if(!useKotb) {
+			task->stop(); 
+		} else {
+			kotb.stop();
+		}
 	}
 };
 
@@ -124,8 +137,13 @@ class MainBLEServer: public Task {
 		BLEServer *pServer = BLEDevice::createServer();
 		MyCallbacks *callbacks = new MyCallbacks();
 		callbacks->controlPanel = controlPanel;
+		//controlPanel->getActionWhite()->withListener(task) ;
+		controlPanel->getActionWhite()->withListener(callbacks->getKimchiOnTheBeach()) ;
+		controlPanel->getLeftYellow()->withListener(callbacks->getKimchiOnTheBeach()) ;
+		controlPanel->getDownGreen()->withListener(callbacks->getKimchiOnTheBeach()) ;
+		controlPanel->getUpBlue()->withListener(callbacks->getKimchiOnTheBeach()) ;
+		controlPanel->getRightRed()->withListener(callbacks->getKimchiOnTheBeach()) ;
 		pServer->setCallbacks(callbacks);
-		controlPanel->getActionWhite()->withListener(task) ;
 
 		/*
 		 * Instantiate hid device
@@ -133,7 +151,8 @@ class MainBLEServer: public Task {
 		hid = new BLEHIDDevice(pServer);
 
 
-		input = hid->inputReport(1); // <-- input REPORTID from report map
+		//input = hid->inputReport(1); // <-- input REPORTID from report map
+		callbacks->getKimchiOnTheBeach()->withBleHidDevice(hid) ;
 		output = hid->outputReport(1); // <-- output REPORTID from report map
 
 		output->setCallbacks(new MyOutputCallbacks());

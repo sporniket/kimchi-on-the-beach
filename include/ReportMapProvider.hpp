@@ -26,13 +26,13 @@ class ReportMapProvider {
          * 
          * @return ReportMapDescriptor 
          */
-        static ReportMapDescriptor getReportMapForSimpleKeyboard() ;
+        static ReportMapDescriptor * getReportMapForSimpleKeyboard() ;
         /**
          * @brief Get the HID Report Map For a combined keyboard, mouse and two gamepads.
          * 
          * @return ReportMapDescriptor 
          */
-        static ReportMapDescriptor getReportMapForCombinedKeyboardMouseGamepadGamepad() ;
+        static ReportMapDescriptor * getReportMapForCombinedKeyboardMouseGamepadGamepad() ;
 
 } ;
 

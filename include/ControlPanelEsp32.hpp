@@ -19,6 +19,10 @@ class ControlPanelEsp32 {
     private:
         FeedbackLed mainLed ;
         InputButton actionWhite = InputButton(CONFIG_PIN_BUTTON_ACTION_WHITE) ;
+        InputButton leftYellow = InputButton(CONFIG_PIN_BUTTON_LEFT_YELLOW);
+        InputButton downGreen = InputButton(CONFIG_PIN_BUTTON_DOWN_GREEN);
+        InputButton upBlue = InputButton(CONFIG_PIN_BUTTON_UP_BLUE);
+        InputButton rightRed = InputButton(CONFIG_PIN_BUTTON_RIGHT_RED);
         Task* ledsUpdater ;
         Task* buttonWatcher ;
         GeneralPurposeInputOutput* gpio ;
@@ -29,6 +33,10 @@ class ControlPanelEsp32 {
         void start() ;
         inline FeedbackLed* getMainLed() {return &mainLed; }
         inline InputButton* getActionWhite() {return &actionWhite; }
+        inline InputButton* getLeftYellow() {return &leftYellow; }
+        inline InputButton* getDownGreen() {return &downGreen; }
+        inline InputButton* getUpBlue() {return &upBlue; }
+        inline InputButton* getRightRed() {return &rightRed; }
         inline GeneralPurposeInputOutput* getGpio() {return gpio ;}
 } ;
 

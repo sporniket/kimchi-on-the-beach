@@ -165,12 +165,16 @@ const uint8_t reportMapCombinedKeyboardMouseGamepadGamepad[] = {
 
 */
 
-ReportMapDescriptor ReportMapProvider::getReportMapForSimpleKeyboard() {
+ReportMapDescriptor *ReportMapProvider::getReportMapForSimpleKeyboard() {
     ReportMapDescriptor* result = new ReportMapDescriptor() ;
     result->data = (uint8_t*)reportMapKeyboard ;
     result->size = sizeof(reportMapKeyboard) ;
+    return result;
 }
 
-ReportMapDescriptor ReportMapProvider::getReportMapForCombinedKeyboardMouseGamepadGamepad() {
-
+ReportMapDescriptor *ReportMapProvider::getReportMapForCombinedKeyboardMouseGamepadGamepad() {
+    ReportMapDescriptor* result = new ReportMapDescriptor() ;
+    result->data = (uint8_t*)reportMapCombinedKeyboardMouseGamepadGamepad ;
+    result->size = sizeof(reportMapCombinedKeyboardMouseGamepadGamepad) ;
+    return result;
 }
