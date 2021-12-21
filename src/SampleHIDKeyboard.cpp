@@ -16,6 +16,7 @@
 #include "InputButton.hpp"
 #include "HidBootKeyboardInputReport.hpp"
 #include "KimchiOnTheBeach.hpp"
+#include "ReportMapProvider.hpp"
 
 static char LOG_TAG[] = "SampleHIDDevice";
 
@@ -220,7 +221,9 @@ class MainBLEServer: public Task {
 		 * Set report map (here is initialized device driver on client side) (MANDATORY)
 		 * https://www.bluetooth.com/specifications/gatt/viewer?attributeXmlFile=org.bluetooth.characteristic.report_map.xml
 		 */
-		hid->reportMap((uint8_t*)reportMap, sizeof(reportMap));
+		ReportMapDescriptor *kimchiReportMap = ReportMapProvider::getReportMapForCombinedKeyboardMouseGamepadGamepad() ;
+		hid->reportMap(kimchiReportMap->data, kimchiReportMap->size);
+		//hid->reportMap((uint8_t*)reportMap, sizeof(reportMap));
 
 		/*
 		 * We are prepared to start hid device services. Before this point we can change all values and/or set parameters we need.
