@@ -10,6 +10,7 @@ KimchiOnTheBeach::~KimchiOnTheBeach(){}
 
 KimchiOnTheBeach::KimchiOnTheBeach(){
     reportOfKeyboard.withListener(this) ;
+    reportOfMouse.withListener(this) ;
 }
 
 // event handlers
@@ -30,9 +31,10 @@ void KimchiOnTheBeach::onInputButtonEvent(InputButtonEvent* event) {
             case CONFIG_PIN_BUTTON_LEFT_YELLOW:
                 ESP_LOGI(LOG_TAG, "from left yellow");
                 if (event->source->isHigh()) {
-                    reportOfKeyboard.registerKeyPress(0x0c) ;
+                    //reportOfKeyboard.registerKeyPress(0x0c) ;
+                    reportOfMouse.moveCursor(-8,0)->notify() ;
                 } else {
-                    reportOfKeyboard.registerKeyRelease(0x0c) ;
+                    //reportOfKeyboard.registerKeyRelease(0x0c) ;
                 }
             break;
             case CONFIG_PIN_BUTTON_DOWN_GREEN:
@@ -54,9 +56,10 @@ void KimchiOnTheBeach::onInputButtonEvent(InputButtonEvent* event) {
             case CONFIG_PIN_BUTTON_RIGHT_RED:
                 ESP_LOGI(LOG_TAG, "from right red");
                 if (event->source->isHigh()) {
-                    reportOfKeyboard.registerKeyPress(0x0f) ;
+                    //reportOfKeyboard.registerKeyPress(0x0f) ;
+                    reportOfMouse.moveCursor(8,0)->notify() ;
                 } else {
-                    reportOfKeyboard.registerKeyRelease(0x0f) ;
+                    //reportOfKeyboard.registerKeyRelease(0x0f) ;
                 }
         }
     }
@@ -71,5 +74,17 @@ void KimchiOnTheBeach::onHidBootKeyboardInputReportEvent(HidBootKeyboardInputRep
         input->setValue(event->source->getReport(), event->source->getSizeOfReport()) ;
         input->notify() ;
         ESP_LOGI(LOG_TAG, "done notify channel %d", KimchiInputChannel::CHANNEL_KEYBOARD);
+    }
+}
+
+void KimchiOnTheBeach::onHidBootMouseInputReportEvent(HidBootMouseInputReportEvent* event) {
+    ESP_LOGI(LOG_TAG, "--->onHidBootMouseInputReportEvent");
+    if (!isStarted()) return; // no connection
+    ESP_LOGI(LOG_TAG, "is started, event_type: %d", event->type);
+    BLECharacteristic* input = inputChannel[KimchiInputChannel::CHANNEL_MOUSE] ;
+    if (REPORT_CHANGED_FOR_MOUSE == event->type) {
+        input->setValue(event->source->getReport(), event->source->getSizeOfReport()) ;
+        input->notify() ;
+        ESP_LOGI(LOG_TAG, "done notify channel %d", KimchiInputChannel::CHANNEL_MOUSE);
     }
 }

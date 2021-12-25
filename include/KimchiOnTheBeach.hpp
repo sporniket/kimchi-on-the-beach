@@ -15,6 +15,7 @@
 
 #include "InputButton.hpp"
 #include "HidBootKeyboardInputReport.hpp"
+#include "HidBootMouseInputReport.hpp"
 
 enum KimchiReportIdOfInput {
     KEYBOARD = 1,
@@ -32,9 +33,11 @@ enum KimchiInputChannel {
 
 /** @brief What the class is for.
  */
-class KimchiOnTheBeach : public InputButtonListener, public HidBootKeyboardInputReportListener {
+class KimchiOnTheBeach : public InputButtonListener, public HidBootKeyboardInputReportListener, public HidBootMouseInputReportListener {
     private:
         HidBootKeyboardInputReport reportOfKeyboard ;
+        HidBootMouseInputReport reportOfMouse ;
+        
         bool started = false;
         BLECharacteristic * inputChannel[KimchiInputChannel::COUNT] ;
 
@@ -43,7 +46,7 @@ class KimchiOnTheBeach : public InputButtonListener, public HidBootKeyboardInput
         virtual ~KimchiOnTheBeach() ;
         inline KimchiOnTheBeach* withBleHidDevice(BLEHIDDevice* device) {
             inputChannel[int(KimchiInputChannel::CHANNEL_KEYBOARD)] = device->inputReport(uint8_t(KimchiReportIdOfInput::KEYBOARD));
-            //inputChannel[KimchiInputChannel::CHANNEL_MOUSE] = device->inputReport(KimchiReportIdOfInput::MOUSE);
+            inputChannel[int(KimchiInputChannel::CHANNEL_MOUSE)] = device->inputReport(uint8_t(KimchiReportIdOfInput::MOUSE));
             //inputChannel[KimchiInputChannel::CHANNEL_GAMEPAD_0] = device->inputReport(KimchiReportIdOfInput::GAMEPAD_0);
             //inputChannel[KimchiInputChannel::CHANNEL_GAMEPAD_1] = device->inputReport(KimchiReportIdOfInput::GAMEPAD_1);
             return this;
@@ -55,6 +58,7 @@ class KimchiOnTheBeach : public InputButtonListener, public HidBootKeyboardInput
         //event handlers
         void onInputButtonEvent(InputButtonEvent* event) ;
         void onHidBootKeyboardInputReportEvent(HidBootKeyboardInputReportEvent* event) ;
+        void onHidBootMouseInputReportEvent(HidBootMouseInputReportEvent* event) ;
 } ;
 
 #endif
