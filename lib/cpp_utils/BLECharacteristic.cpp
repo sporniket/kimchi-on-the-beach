@@ -510,13 +510,13 @@ void BLECharacteristic::notify(bool is_notification) {
 	}
 	if(is_notification) {
 		if (p2902 != nullptr && !p2902->getNotifications()) {
-			ESP_LOGD(LOG_TAG, "<< notifications disabled; ignoring");
+			ESP_LOGW(LOG_TAG, "<< notifications disabled; ignoring");
 			return;
 		}
 	}
 	else{
 		if (p2902 != nullptr && !p2902->getIndications()) {
-			ESP_LOGD(LOG_TAG, "<< indications disabled; ignoring");
+			ESP_LOGW(LOG_TAG, "<< indications disabled; ignoring");
 			return;
 		}
 	}
