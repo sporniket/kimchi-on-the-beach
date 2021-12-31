@@ -134,7 +134,7 @@ class MainBLEServer: public Task {
 		controlPanel->getMainLed()->setFeedbackSequenceAndLoop(BLINK_TWICE);
 
 		task = new MyTask();
-		BLEDevice::init("ESP32");
+		BLEDevice::init(CONFIG_LABEL_DEVICE_NAME);
 		BLEServer *pServer = BLEDevice::createServer();
 		MyCallbacks *callbacks = new MyCallbacks();
 		callbacks->controlPanel = controlPanel;
@@ -162,7 +162,7 @@ class MainBLEServer: public Task {
 		 * Set manufacturer name (OPTIONAL)
 		 * https://www.bluetooth.com/specifications/gatt/viewer?attributeXmlFile=org.bluetooth.characteristic.manufacturer_name_string.xml
 		 */
-		std::string name = "esp-community";
+		std::string name = CONFIG_LABEL_MANUFACTURER_NAME;
 		hid->manufacturer()->setValue(name);
 
 		/*

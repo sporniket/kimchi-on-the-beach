@@ -1,5 +1,17 @@
 menu "BLE HID COMBO Configuration"
 
+    config LABEL_DEVICE_NAME
+        string "Device Name"
+        default "The mighty device"
+        help
+            This label will be displayed in the OS bluetooth configuration panel to designate the device.
+
+    config LABEL_MANUFACTURER_NAME
+        string "Manufacturer Name"
+        default "A. Nonymous"
+        help
+            This label will be displayed about the device manufacturer.
+
     config PIN_STATUS_MAIN
         int "Main LED GPIO number"
         range 0 34
@@ -34,7 +46,7 @@ menu "BLE HID COMBO Configuration"
         default 5
         help
             GPIO number (IOxx) for the 'Alternate status' LED.
-#
+
     config PIN_BUTTON_ACTION_WHITE
         int "BUTTON 'ACTION' [WHITE] GPIO number"
         range 0 34
