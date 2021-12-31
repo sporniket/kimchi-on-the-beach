@@ -87,9 +87,9 @@ const uint8_t reportMapCombinedKeyboardMouseGamepadGamepad[] = {
     USAGE_PAGE(1),      0x01, // USAGE_PAGE (Generic Desktop)
     USAGE(1),           0x02, // USAGE (Mouse)
     COLLECTION(1),      0x01, // COLLECTION (Application)
-    REPORT_ID(1),		0x02, //   REPORTID #2
     USAGE(1),           0x01, //   USAGE (Pointer)
     COLLECTION(1),      0x00, //   COLLECTION (Physical)
+    REPORT_ID(1),		0x02, //   REPORTID #2
     // ------------------------------------------------- Buttons (Left, Right, Middle, Back, Forward)
     USAGE_PAGE(1),      0x09, //     USAGE_PAGE (Button)
     USAGE_MINIMUM(1),   0x01, //     USAGE_MINIMUM (Button 1)
@@ -123,6 +123,7 @@ const uint8_t reportMapCombinedKeyboardMouseGamepadGamepad[] = {
     INPUT(1),           0x06, //     INPUT (Data, Var, Rel)
     END_COLLECTION(0),        //   END_COLLECTION
     END_COLLECTION(0),        // END_COLLECTION
+    /*
     // ========================<[ GAMEPAD 0 ]>========================
     // source : https://github.com/lemmingDev/ESP32-BLE-Gamepad
     // a simple gamepad : 4-direction pad as 4 buttons + 4 buttons (A, B, Start, Select) = 8 buttons
@@ -158,6 +159,7 @@ const uint8_t reportMapCombinedKeyboardMouseGamepadGamepad[] = {
     UNIT(1),            0x00, //     UNIT (None)
     INPUT(1),           0x02, //     INPUT (Data, Variable, Absolute) ;5 button bits
     END_COLLECTION(0),        // END_COLLECTION
+    */
 };
 
 

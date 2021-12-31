@@ -32,7 +32,7 @@ void KimchiOnTheBeach::onInputButtonEvent(InputButtonEvent* event) {
                 ESP_LOGI(LOG_TAG, "from left yellow");
                 if (event->source->isHigh()) {
                     //reportOfKeyboard.registerKeyPress(0x0c) ;
-                    reportOfMouse.moveCursor(-8,0)->notify() ;
+                    reportOfMouse.moveCursor(-16,-16)->notify() ;
                 } else {
                     //reportOfKeyboard.registerKeyRelease(0x0c) ;
                 }
@@ -57,7 +57,7 @@ void KimchiOnTheBeach::onInputButtonEvent(InputButtonEvent* event) {
                 ESP_LOGI(LOG_TAG, "from right red");
                 if (event->source->isHigh()) {
                     //reportOfKeyboard.registerKeyPress(0x0f) ;
-                    reportOfMouse.moveCursor(8,0)->notify() ;
+                    reportOfMouse.moveCursor(16,16)->notify() ;
                 } else {
                     //reportOfKeyboard.registerKeyRelease(0x0f) ;
                 }
