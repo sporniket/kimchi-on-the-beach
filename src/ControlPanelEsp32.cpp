@@ -15,7 +15,6 @@
 // You should have received a copy of the GNU General Public License along 
 // with 'Kimchi on the beach'. If not, see <https://www.gnu.org/licenses/>. 
 
-
 // header include
 #include "ControlPanelEsp32.hpp"
 
