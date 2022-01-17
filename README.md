@@ -84,9 +84,9 @@ Finally, upload on your development board.
 To be done. In short, one will needs 5 leds, 5 push buttons, one 4-channel bidirectionnal level translator, one IKBD unit, some batteries holder, and voltage regulator to get 5V. A perfboard, breadboard and a bunch of wires.
 
 ## 4. Known issues
-See the [project issues](https://github.com/sporniket/core/issues) page.
+See the [project issues](https://github.com/sporniket/kimchi-on-the-beach/issues) page.
 
 ## 5. Miscellanous
 
 ### Report issues
-Use the [project issues](https://github.com/sporniket/core/issues) page.
+Use the [project issues](https://github.com/sporniket/kimchi-on-the-beach/issues) page.
