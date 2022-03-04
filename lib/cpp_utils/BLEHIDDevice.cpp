@@ -115,7 +115,7 @@ BLECharacteristic* BLEHIDDevice::inputReport(uint8_t reportID) {
 	inputReportCharacteristic->setAccessPermissions(ESP_GATT_PERM_READ_ENCRYPTED | ESP_GATT_PERM_WRITE_ENCRYPTED);
 	inputReportDescriptor->setAccessPermissions(ESP_GATT_PERM_READ_ENCRYPTED | ESP_GATT_PERM_WRITE_ENCRYPTED);
 	p2902->setAccessPermissions(ESP_GATT_PERM_READ_ENCRYPTED | ESP_GATT_PERM_WRITE_ENCRYPTED);
-	p2902->setNotifications(true) ; //DSP : force notification 
+	p2902->setNotifications(true) ; // force notif
 
 	uint8_t desc1_val[] = { reportID, 0x01 };
 	inputReportDescriptor->setValue((uint8_t*) desc1_val, 2);

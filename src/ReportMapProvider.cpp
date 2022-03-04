@@ -139,14 +139,14 @@ const uint8_t reportMapCombinedKeyboardMouseGamepadGamepad[] = {
     INPUT(1),           0x06, //     INPUT (Data, Var, Rel)
     END_COLLECTION(0),        //   END_COLLECTION
     END_COLLECTION(0),        // END_COLLECTION
-    /*
     // ========================<[ GAMEPAD 0 ]>========================
     // source : https://github.com/lemmingDev/ESP32-BLE-Gamepad
     // a simple gamepad : 4-direction pad as 4 buttons + 4 buttons (A, B, Start, Select) = 8 buttons
     USAGE_PAGE(1),      0x01, // USAGE_PAGE (Generic Desktop)
     USAGE(1),           0x05, // USAGE (Gamepad)
     COLLECTION(1),      0x01, // COLLECTION (Application)
-    REPORT_ID(1),		0x03, //   REPORTID #3
+    COLLECTION(1),      0x00, //   COLLECTION (Physical)
+    REPORT_ID(1),		0x03, //     REPORTID #3
     USAGE_PAGE(1),      0x09, //     USAGE_PAGE (Button)
     USAGE_MINIMUM(1),   0x01, //     USAGE_MINIMUM (Button 1)
     USAGE_MAXIMUM(1),   0x08, //     USAGE_MAXIMUM (Button 8)
@@ -157,13 +157,15 @@ const uint8_t reportMapCombinedKeyboardMouseGamepadGamepad[] = {
     UNIT_EXPONENT(1),   0x00, //     UNIT_EXPONENT (0)
     UNIT(1),            0x00, //     UNIT (None)
     INPUT(1),           0x02, //     INPUT (Data, Variable, Absolute) ;5 button bits
+    END_COLLECTION(0),        //   END_COLLECTION
     END_COLLECTION(0),        // END_COLLECTION
     // ========================<[ GAMEPAD 1 ]>========================
     // once again
     USAGE_PAGE(1),      0x01, // USAGE_PAGE (Generic Desktop)
     USAGE(1),           0x05, // USAGE (Gamepad)
     COLLECTION(1),      0x01, // COLLECTION (Application)
-    REPORT_ID(1),		0x04, //   REPORTID #4
+    COLLECTION(1),      0x00, //   COLLECTION (Physical)
+    REPORT_ID(1),		0x04, //     REPORTID #4
     USAGE_PAGE(1),      0x09, //     USAGE_PAGE (Button)
     USAGE_MINIMUM(1),   0x01, //     USAGE_MINIMUM (Button 1)
     USAGE_MAXIMUM(1),   0x08, //     USAGE_MAXIMUM (Button 8)
@@ -174,8 +176,8 @@ const uint8_t reportMapCombinedKeyboardMouseGamepadGamepad[] = {
     UNIT_EXPONENT(1),   0x00, //     UNIT_EXPONENT (0)
     UNIT(1),            0x00, //     UNIT (None)
     INPUT(1),           0x02, //     INPUT (Data, Variable, Absolute) ;5 button bits
+    END_COLLECTION(0),        //   END_COLLECTION
     END_COLLECTION(0),        // END_COLLECTION
-    */
 };
 
 

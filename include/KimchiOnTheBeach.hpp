@@ -27,6 +27,7 @@
 // project includes
 
 // -- BEGIN from snippets
+#include "BLECharacteristic.h"
 #include "BLEHIDDevice.h"
 // -- END from snippets
 
@@ -62,7 +63,8 @@ class KimchiOnTheBeach : public InputButtonListener, public HidBootKeyboardInput
         KimchiOnTheBeach() ;
         virtual ~KimchiOnTheBeach() ;
         inline KimchiOnTheBeach* withBleHidDevice(BLEHIDDevice* device) {
-            inputChannel[int(KimchiInputChannel::CHANNEL_KEYBOARD)] = device->inputReport(uint8_t(KimchiReportIdOfInput::KEYBOARD));
+            inputChannel[int(KimchiInputChannel::CHANNEL_KEYBOARD)] = device->inputReport(uint8_t(KimchiReportIdOfInput::KEYBOARD)); 
+            // from this point, any other input channel MUST force the notification in the '2902' characteristic ?
             inputChannel[int(KimchiInputChannel::CHANNEL_MOUSE)] = device->inputReport(uint8_t(KimchiReportIdOfInput::MOUSE));
             //inputChannel[KimchiInputChannel::CHANNEL_GAMEPAD_0] = device->inputReport(KimchiReportIdOfInput::GAMEPAD_0);
             //inputChannel[KimchiInputChannel::CHANNEL_GAMEPAD_1] = device->inputReport(KimchiReportIdOfInput::GAMEPAD_1);
@@ -76,6 +78,9 @@ class KimchiOnTheBeach : public InputButtonListener, public HidBootKeyboardInput
         void onInputButtonEvent(InputButtonEvent* event) ;
         void onHidBootKeyboardInputReportEvent(HidBootKeyboardInputReportEvent* event) ;
         void onHidBootMouseInputReportEvent(HidBootMouseInputReportEvent* event) ;
+    
+    private:
+        void forceNotifyAndIndicate(BLE2902* p2902) ;
 } ;
 
 #endif
